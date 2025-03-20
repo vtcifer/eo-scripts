@@ -11,9 +11,13 @@
               game: any
               tags: core, movement
            version: 2.2.7
-          required: Lich >= 5.4.1
+          required: Lich >= 5.10.3
 
    changelog:
+      2.2.8 (2025-03-20)
+        Convert goback option to use SesionVars instead of UserVars (avoid hitting SQLite DB as this doesn't 
+          need to persist across sessions)
+        Bump required lich version to match first version with SessionVars
       2.2.7 (2025-03-03)
         Allow UID usage in go2 custom save targets list, translates to LichID for saving
       2.2.6 (2025-01-18)
@@ -1391,7 +1395,7 @@ module Go2
   end
 
   if target_search_string =~ /goback/i
-    last_start_room = UserVars.go2_start_room.to_s
+    last_start_room = SesionVars.go2_start_room.to_s
     if last_start_room
       target_search_string = last_start_room
       echo "Attempting to return to last start room of: #{last_start_room}"
@@ -1927,7 +1931,7 @@ module Go2
   first_move   = true
 
   # Store start room for future use
-  UserVars.go2_start_room = start_room.id
+  SessionVars.go2_start_room = start_room.id
 
   loop {
     moves_sent = $room_count
